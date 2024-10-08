@@ -18,18 +18,65 @@ namespace Inventory_System_MVC.Controllers
         #region Methods
 
         // Home/Index action to show both equipment and customer lists
-        public IActionResult Index()
-        {
-            // Fetch both Equipment and Customer lists
-            var equipmentList = _context.Equipment.ToList();
-            var customerList = _context.Customers.Include(c => c.Equipment).ToList();
+        //public IActionResult Index(string searchEquipment, string searchCustomer)
+        //{
 
-            // Pass both lists to the view using ViewData
+        //    ViewData["searchEquipment"] = searchEquipment;
+        //    ViewData["searchCustomer"] = searchCustomer;
+
+        //    var equipments = from e in _context.Equipment select e;
+
+        //    if (!string.IsNullOrEmpty(searchEquipment))
+        //    {
+        //        equipments = equipments.Where(e => e.EquipmentName.Contains(searchEquipment));
+        //    }
+
+
+        //    // Fetch both Equipment and Customer lists
+        //    var equipmentList = _context.Equipment.ToList();
+        //    var customerList = _context.Customers.Include(c => c.Equipment).ToList();
+
+        //    // Pass both lists to the view using ViewData
+        //    ViewData["EquipmentList"] = equipmentList;
+        //    ViewData["CustomerList"] = customerList;
+
+        //    return View();
+        //}
+
+        public IActionResult Index(string searchEquipment, string searchCustomer)
+        {
+            // Pass search values back to the view for display in the search boxes
+            ViewData["searchEquipment"] = searchEquipment;
+            ViewData["searchCustomer"] = searchCustomer;
+
+            // Initialize the equipment query
+            var equipmentQuery = from e in _context.Equipment select e;
+
+            // Filter by searchEquipment if the search term is not null or empty
+            if (!string.IsNullOrEmpty(searchEquipment))
+            {
+                equipmentQuery = equipmentQuery.Where(e => e.EquipmentName.Contains(searchEquipment));
+            }
+
+            // Fetch the filtered equipment list
+            var equipmentList = equipmentQuery.ToList();
+
+            // Fetch the full customer list (if you want to add customer search later, adjust this too)
+            var customerQuery = _context.Customers.Include(c => c.Equipment).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchCustomer))
+            {
+                customerQuery = customerQuery.Where(c => c.CustomerName.Contains(searchCustomer));
+            }
+
+            var customerList = customerQuery.ToList();
+            // Pass both lists to the view
             ViewData["EquipmentList"] = equipmentList;
             ViewData["CustomerList"] = customerList;
 
             return View();
         }
+
 
         public IActionResult CreateEquipment ()
         {
