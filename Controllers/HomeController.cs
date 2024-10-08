@@ -15,6 +15,8 @@ namespace Inventory_System_MVC.Controllers
             _context = context;
         }
 
+        #region Methods
+
         // Home/Index action to show both equipment and customer lists
         public IActionResult Index()
         {
@@ -34,24 +36,26 @@ namespace Inventory_System_MVC.Controllers
 
             return View();
         }
+
         [HttpPost]
         public IActionResult CreateEquipment(Equipment equipment)
         {
           
-                try
-                {
-                    _context.Equipment.Add(equipment);
-                    _context.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                catch (Exception ex)
-                {
-                    // Handle the exception (e.g., log it)
-                    ModelState.AddModelError("", "An error occurred while saving the equipment. Please try again.");
-                }
+            try
+            {
+                _context.Equipment.Add(equipment);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception (e.g., log it)
+                ModelState.AddModelError("", "An error occurred while saving the equipment. Please try again.");
+            }
             
             return View(equipment);
         }
+
         public IActionResult CreateCustomer()
         {
             var equipmentList = _context.Equipment.ToList();
@@ -98,5 +102,6 @@ namespace Inventory_System_MVC.Controllers
             return View(customer);
         }
 
+        #endregion
     }
 }
