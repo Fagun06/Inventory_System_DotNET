@@ -1,0 +1,82 @@
+﻿@{
+    var equipmentList = ViewData["EquipmentList"] as List<Inventory_System_MVC.Models.Equipment>;
+    var customerList = ViewData["CustomerList"] as List<Inventory_System_MVC.Models.Customer>;
+    var searchQuery = ViewData["SearchQuery"] as string; // Retrieve the search query from ViewData
+}
+
+
+<div class="row">
+    <!-- Equipment List Table -->
+    <div class="col-md-6">
+        <a href="/Home/CreateEquipment" class="btn btn-primary">Add New</a>
+        <div class="table-container">
+            <h2>Equipment List</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Equipment Name</th>
+                        <th>Quantity</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (equipmentList != null && equipmentList.Any())
+                    {
+                        @foreach (var equipment in equipmentList)
+                        {
+                            <tr>
+                                <td>@equipment.EquipmentName</td>
+                                <td>@equipment.Quantity</td>
+                                <td>@equipment.Date.ToShortDateString()</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3">No equipment found matching the search criteria.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Customer List Table -->
+    <div class="col-md-6">
+        <div class="table-container">
+            <a href="/Home/CreateCustomer" class="btn btn-primary">Add New</a>
+            <h2>Customer List</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Mobile</th>
+                        <th>Equipment Purchased</th>
+                        <th>Quantity Purchased</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (customerList != null && customerList.Any())
+                    {
+                        @foreach (var customer in customerList)
+                        {
+                            <tr>
+                                <td>@customer.CustomerName</td>
+                                <td>@customer.CustomerMobile</td>
+                                <td>@customer.Equipment.EquipmentName</td>
+                                <td>@customer.EquiCount</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">No customers found matching the search criteria.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

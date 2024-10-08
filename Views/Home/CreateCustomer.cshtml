@@ -1,0 +1,51 @@
+﻿@model Inventory_System_MVC.Models.Customer
+
+
+
+<h2>Create Customer</h2>
+
+<form asp-action="CreateCustomer" method="post">
+    <div class="form-group">
+        <label asp-for="CustomerName" class="control-label"></label>
+        <input asp-for="CustomerName" class="form-control" />
+        <span asp-validation-for="CustomerName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CustomerMobile" class="control-label"></label>
+        <input asp-for="CustomerMobile" class="form-control" />
+        <span asp-validation-for="CustomerMobile" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EquipmentID" class="control-label"></label>
+        @if (ViewBag.EquipmentList != null && ViewBag.EquipmentList.Count > 0)
+        {
+            <select asp-for="EquipmentID" class="form-control" asp-items="@(new SelectList(ViewBag.EquipmentList, "EquipmentID", "EquipmentName"))"></select>
+        }
+        else
+        {
+            <p class="text-danger">No equipment available to select.</p>
+        }
+        <span asp-validation-for="EquipmentID" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="EquiCount" class="control-label"></label>
+        <input asp-for="EquiCount" class="form-control" type="number" min="1" />
+        <span asp-validation-for="EquiCount" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Customer</button>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
